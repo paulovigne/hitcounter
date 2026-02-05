@@ -99,17 +99,8 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, "ok")
 }
-	} else {
-		localHits++
-		hits = localHits
-	}
-
-	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprintf(w, "Hits: %d\n", hits)
-}
 
 func incrementRedis() (uint64, error) {
 	val, err := redisClient.Incr(ctx, "hit_counter").Result()
 	return uint64(val), err
 }
-
