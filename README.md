@@ -139,20 +139,47 @@ Pod redis
 ├── k8s/
 │   ├── hitcounter-deployment.yaml
 │   ├── hitcounter-service.yaml
-│   ├── redis-deployment.yaml
-│   ├── redis-service.yaml
-│   ├── redis-pvc.yaml
+|   ├── redis-statefulset.yaml
+|   ├── redis-headless-service.yaml
 │   └── configmap.yaml
 └── README.md
 ```
 
 🧪 Execução Local sem Redis
 É possível executar a aplicação em modo totalmente stateless:
-
 ```
-ENABLE_REDIS=false go run hitcounter.go
+docker run -d \
+  --name hitcounter \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -e ENABLE_REDIS=false \
+  ghcr.io/paulovigne/hit-counter:main
 ```
 Nesse modo, o contador é mantido apenas em memória.
+
+HitCounter + Redis (Docker sem Compose)
+```
+docker network create hitcounter-net
+docker volume create redis-data
+
+docker run -d \
+  --name redis \
+  --network hitcounter-net \
+  -v redis-data:/data \
+  redis:7-alpine \
+  --appendonly yes
+
+docker run -d \
+  --name hitcounter \
+  --network hitcounter-net \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -e ENABLE_REDIS=true \
+  -e REDIS_HOST=redis \
+  -e REDIS_PORT=6379 \
+  ghcr.io/paulovigne/hit-counter:main
+
+```
 
 🎯 Objetivo do Projeto
 Este projeto tem fins educacionais e demonstrativos, sendo útil para:
