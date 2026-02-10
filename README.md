@@ -140,6 +140,7 @@ Pod redis
 │   ├── hitcounter-service.yaml
 |   ├── configmap.yaml
 |   ├── ingress.yaml
+|   ├── serviceaccount.yaml
 |   ├── redis-headless-service.yaml
 │   └── redis-statefulset.yaml
 └── README.md
