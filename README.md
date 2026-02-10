@@ -9,6 +9,37 @@ O projeto foi criado como exemplo prático de:
 - Conversão de Docker Compose para manifestos Kubernetes
 - Separação entre aplicação stateless e serviço stateful
 
+📁 Estrutura do Repositório
+
+```
+.
+├── docker-compose.yml
+├── Dockerfile
+├── hitcounter.go
+├── helm/
+|   ├── Chart.yaml
+|   ├── values.yaml
+|   ├── templates/
+│      ├── _helpers.tpl
+│      ├── serviceaccount.yaml
+│      ├── configmap.yaml
+│      ├── hitcounter-deployment.yaml
+│      ├── hitcounter-service.yaml
+│      ├── redis-statefulset.yaml
+│      ├── redis-headless-service.yaml
+│      ├── route.yaml
+│      └── ingress.yaml
+├── k8s/
+│   ├── hitcounter-deployment.yaml
+│   ├── hitcounter-service.yaml
+|   ├── configmap.yaml
+|   ├── ingress.yaml
+|   ├── serviceaccount.yaml
+|   ├── redis-headless-service.yaml
+│   └── redis-statefulset.yaml
+└── README.md
+```
+
 ---
 
 ## 📌 Visão Geral da Arquitetura
@@ -126,24 +157,6 @@ Pod hitcounter
 Service redis
    ↓
 Pod redis
-```
-
-📁 Estrutura Sugerida do Repositório
-
-```
-.
-├── docker-compose.yml
-├── Dockerfile
-├── hitcounter.go
-├── k8s/
-│   ├── hitcounter-deployment.yaml
-│   ├── hitcounter-service.yaml
-|   ├── configmap.yaml
-|   ├── ingress.yaml
-|   ├── serviceaccount.yaml
-|   ├── redis-headless-service.yaml
-│   └── redis-statefulset.yaml
-└── README.md
 ```
 
 🧪 Execução Local sem Redis
