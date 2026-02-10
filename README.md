@@ -157,7 +157,7 @@ docker run -d \
 ```
 Nesse modo, o contador é mantido apenas em memória.
 
-HitCounter + Redis (Docker sem Compose)
+🧪 Execução HitCounter + Redis
 ```
 docker network create hitcounter-net
 docker volume create redis-data
@@ -180,6 +180,7 @@ docker run -d \
   ghcr.io/paulovigne/hit-counter:main
 
 ```
+Nesse modo, o contador é mantido em disco no volume redis-data.
 
 🎯 Objetivo do Projeto
 Este projeto tem fins educacionais e demonstrativos, sendo útil para:
