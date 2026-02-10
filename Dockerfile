@@ -1,7 +1,7 @@
 # =========================
 # Stage 1 - Build
 # =========================
-FROM golang:1.22-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
 # =========================
 # Stage 2 - Runtime
 # =========================
-FROM gcr.io/distroless/base-debian12
+FROM gcr.io/distroless/base-debian13
 
 WORKDIR /app
 
