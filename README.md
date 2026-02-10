@@ -103,7 +103,6 @@ Os manifestos Kubernetes deste repositório foram derivados diretamente do docke
 | `services`     | `Deployment`                       |
 | `ports`        | `Service`                          |
 | `environment`  | `ConfigMap`                        |
-| `depends_on`   | `readinessProbe`                   |
 | `healthcheck`  | `livenessProbe` / `readinessProbe` |
 | `volumes`      | `PersistentVolumeClaim`            |
 
