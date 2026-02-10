@@ -19,7 +19,7 @@ O projeto foi criado como exemplo prático de:
 ├── helm/
 |   ├── Chart.yaml
 |   ├── values.yaml
-|   ├── templates/
+|   └── templates/
 │      ├── _helpers.tpl
 │      ├── serviceaccount.yaml
 │      ├── configmap.yaml
