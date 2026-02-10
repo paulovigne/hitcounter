@@ -15,6 +15,10 @@ spec:
       labels:
         app: redis
     spec:
+      serviceAccountName: hitcounter-sa
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 1001
       containers:
         - name: redis
           image: redis:7-alpine
@@ -23,19 +27,36 @@ spec:
           args:
             - "--appendonly"
             - "yes"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - name: redis-data
               mountPath: /data
           readinessProbe:
-            tcpSocket:
-              port: 6379
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          livenessProbe:
-            tcpSocket:
-              port: 6379
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  redis-cli -h 127.0.0.1 -p 6379 ping | grep -q PONG
             initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  redis-cli -h 127.0.0.1 -p 6379 ping | grep -q PONG
+            initialDelaySeconds: 30
             periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 5
   volumeClaimTemplates:
     - metadata:
         name: redis-data
