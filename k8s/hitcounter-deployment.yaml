@@ -15,6 +15,7 @@ spec:
         app: hitcounter
     spec:
       serviceAccountName: hitcounter-sa
+      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
       containers:
@@ -29,17 +30,24 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
           readinessProbe:
             httpGet:
               path: /healthz
               port: 8080
             initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /healthz
               port: 8080
             initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 5
           resources:
             requests:
               cpu: 50m
