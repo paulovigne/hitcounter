@@ -6,7 +6,7 @@ O contador pode operar de forma **stateless** ou utilizando **Redis** para persi
 O projeto foi criado como exemplo prático de:
 - Aplicação cloud-native
 - Uso de Docker Compose
-- Conversão de Docker Compose para manifestos Kubernetes
+- Uso com manifestos Kubernetes e Helm Chart
 - Separação entre aplicação stateless e serviço stateful
 
 📁 Estrutura do Repositório
