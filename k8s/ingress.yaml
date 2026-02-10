@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: hitcounter
 spec:
+  ingressClassName: traefik
   rules:
     - host: hitcounter.local
       http:
