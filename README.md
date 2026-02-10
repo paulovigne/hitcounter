@@ -130,6 +130,8 @@ Pod redis
 ```
 
 📁 Estrutura Sugerida do Repositório
+
+```
 .
 ├── docker-compose.yml
 ├── Dockerfile
@@ -142,6 +144,7 @@ Pod redis
 │   ├── redis-pvc.yaml
 │   └── configmap.yaml
 └── README.md
+```
 
 🧪 Execução Local sem Redis
 É possível executar a aplicação em modo totalmente stateless:
