@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hitcounter-config
+data:
+  PORT: {{ .Values.config.port | quote }}
+  ENABLE_REDIS: {{ .Values.config.enableRedis | quote }}
+  REDIS_HOST: {{ .Values.config.redisHost | quote }}
+  REDIS_PORT: {{ .Values.config.redisPort | quote }}
