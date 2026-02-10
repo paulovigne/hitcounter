@@ -1,0 +1,35 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/paulovigne/hit-counter
+  tag: main
+  pullPolicy: Always
+
+serviceAccount:
+  create: true
+  name: hitcounter-sa
+  automount: false
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+config:
+  port: "8080"
+  enableRedis: "true"
+  redisHost: redis
+  redisPort: "6379"
+
+redis:
+  image: redis:7-alpine
+  storage: 1Gi
+
+route:
+  enabled: false
+  tlsTermination: edge
+
+ingress:
+  enabled: true
+  className: traefik
+  host: hitcounter.local
