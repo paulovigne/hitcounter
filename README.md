@@ -138,9 +138,10 @@ Pod redis
 ├── k8s/
 │   ├── hitcounter-deployment.yaml
 │   ├── hitcounter-service.yaml
-|   ├── redis-statefulset.yaml
+|   ├── configmap.yaml
+|   ├── ingress.yaml
 |   ├── redis-headless-service.yaml
-│   └── configmap.yaml
+│   └── redis-statefulset.yaml
 └── README.md
 ```
 
