@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled }}
+{{- if not .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -16,4 +16,19 @@ spec:
                 name: hitcounter
                 port:
                   number: 80
+{{- end }}
+{{- if .Values.openshift.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hitcounter
+spec:
+  host: {{ .Values.openshift.host }}
+  to:
+    kind: Service
+    name: hitcounter
+  port:
+    targetPort: http
+  tls:
+    termination: {{ .Values.openshift.tlsTermination }}
 {{- end }}
