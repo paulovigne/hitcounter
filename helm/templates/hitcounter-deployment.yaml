@@ -18,6 +18,17 @@ spec:
       automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
       securityContext:
         runAsNonRoot: true
+      {{- if not .Values.openshift.enabled }}
+        {{- if .Values.securityContext.runAsUser }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
+        {{- if .Values.securityContext.runAsGroup }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        {{- end }}
+        {{- if .Values.securityContext.fsGroup }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        {{- end }}
+      {{- end }}        
       containers:
         - name: hitcounter
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
