@@ -33,8 +33,9 @@ redis:
 
 openshift:
   enabled: false
-  host: null
-  tlsTermination: edge
+  route:
+    host: null
+    tlsTermination: edge
 
 # Ignored if openshift.enabled: true
 ingress:
