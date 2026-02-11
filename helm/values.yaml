@@ -10,6 +10,11 @@ serviceAccount:
   name: hitcounter-sa
   automount: false
 
+securityContext:
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+
 service:
   type: ClusterIP
   port: 80
@@ -25,11 +30,10 @@ redis:
   image: redis:7-alpine
   storage: 1Gi
 
-route:
+openshift:
   enabled: false
   tlsTermination: edge
 
 ingress:
-  enabled: true
   className: traefik
   host: hitcounter.local
