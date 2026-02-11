@@ -198,7 +198,6 @@ Nesse modo, o contador é mantido em disco no volume redis-data.
 
 🧪 Helm Chart
 ```
-helm install -n hitcounter hitcounter oci://ghcr.io/paulovigne/hitcounter
 helm install hitcounter oci://ghcr.io/paulovigne/hitcounter \
   --version 0.1.0 \
   --namespace hitcounter \
