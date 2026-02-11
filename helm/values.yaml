@@ -32,6 +32,7 @@ redis:
 
 openshift:
   enabled: false
+  host: null
   tlsTermination: edge
 
 ingress:
