@@ -196,6 +196,11 @@ docker run -d \
 ```
 Nesse modo, o contador é mantido em disco no volume redis-data.
 
+🧪 Helm Chart
+```
+helm install -n hitcounter hitcounter oci://
+```
+
 🎯 Objetivo do Projeto
 Este projeto tem fins educacionais e demonstrativos, sendo útil para:
 * Estudos de Kubernetes
