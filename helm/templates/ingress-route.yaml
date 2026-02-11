@@ -23,12 +23,12 @@ kind: Route
 metadata:
   name: hitcounter
 spec:
-  host: {{ .Values.openshift.host }}
+  host: {{ .Values.openshift.route.host }}
   to:
     kind: Service
     name: hitcounter
   port:
     targetPort: http
   tls:
-    termination: {{ .Values.openshift.tlsTermination }}
+    termination: {{ .Values.openshift.route.tlsTermination }}
 {{- end }}
