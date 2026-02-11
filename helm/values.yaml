@@ -10,6 +10,7 @@ serviceAccount:
   name: hitcounter-sa
   automount: false
 
+# Ignored if openshift.enabled: true
 securityContext:
   runAsUser: 65532
   runAsGroup: 65532
@@ -35,6 +36,7 @@ openshift:
   host: null
   tlsTermination: edge
 
+# Ignored if openshift.enabled: true
 ingress:
   className: traefik
   host: hitcounter.local
