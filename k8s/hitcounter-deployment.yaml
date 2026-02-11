@@ -18,6 +18,9 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532        
       containers:
         - name: hitcounter
           image: ghcr.io/paulovigne/hit-counter:main
