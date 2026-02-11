@@ -4,30 +4,34 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
 var (
-	ctx          = context.Background()
-	enableRedis  = false
+	enableRedis bool
 	redisClient *redis.Client
-	localHits    uint64 = 0
+	localHits   atomic.Uint64
 )
 
 func main() {
-	// Read env ENABLE_REDIS (default: false)
-	env := os.Getenv("ENABLE_REDIS")
-	if env != "" {
-		parsed, err := strconv.ParseBool(env)
-		if err == nil {
-			enableRedis = parsed
+
+	// ===== MODO HEALTHCHECK (para Docker) =====
+	if len(os.Args) > 1 && os.Args[1] == "--healthcheck" {
+		if err := runHealthcheck(); err != nil {
+			os.Exit(1)
 		}
+		os.Exit(0)
 	}
+
+	// ===== CONFIG =====
+	enableRedis = parseBoolEnv("ENABLE_REDIS", false)
 
 	if enableRedis {
 		initRedis()
@@ -36,29 +40,47 @@ func main() {
 		log.Println("Redis DISABLED: using in-memory counter")
 	}
 
-	http.HandleFunc("/", hitHandler)
-	http.HandleFunc("/healthz", healthHandler)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", hitHandler)
+	mux.HandleFunc("/healthz", healthHandler)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	port := getEnv("PORT", "8080")
+
+	server := &http.Server{
+		Addr:         ":" + port,
+		Handler:      mux,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		IdleTimeout:  30 * time.Second,
 	}
 
 	log.Printf("Listening on :%s\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(server.ListenAndServe())
+}
+
+func parseBoolEnv(key string, defaultVal bool) bool {
+	env := os.Getenv(key)
+	if env == "" {
+		return defaultVal
+	}
+	parsed, err := strconv.ParseBool(env)
+	if err != nil {
+		return defaultVal
+	}
+	return parsed
+}
+
+func getEnv(key, defaultVal string) string {
+	val := os.Getenv(key)
+	if val == "" {
+		return defaultVal
+	}
+	return val
 }
 
 func initRedis() {
-	host := os.Getenv("REDIS_HOST")
-	if host == "" {
-		host = "localhost"
-	}
-
-	port := os.Getenv("REDIS_PORT")
-	if port == "" {
-		port = "6379"
-	}
-
+	host := getEnv("REDIS_HOST", "localhost")
+	port := getEnv("REDIS_PORT", "6379")
 	password := os.Getenv("REDIS_PASSWORD")
 
 	redisClient = redis.NewClient(&redis.Options{
@@ -67,10 +89,10 @@ func initRedis() {
 		DB:       0,
 	})
 
-	ctxTimeout, cancel := context.WithTimeout(ctx, 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
-	if err := redisClient.Ping(ctxTimeout).Err(); err != nil {
+	if err := redisClient.Ping(ctx).Err(); err != nil {
 		log.Fatalf("Failed to connect to Redis: %v", err)
 	}
 }
@@ -86,8 +108,7 @@ func hitHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		localHits++
-		hits = localHits
+		hits = localHits.Add(1)
 	}
 
 	w.Header().Set("Content-Type", "text/plain")
@@ -95,12 +116,39 @@ func hitHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
+	if err := runHealthcheck(); err != nil {
+		http.Error(w, "unhealthy", http.StatusServiceUnavailable)
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, "ok")
 }
 
 func incrementRedis() (uint64, error) {
-	val, err := redisClient.Incr(ctx, "hit_counter").Result()
+	val, err := redisClient.Incr(context.Background(), "hit_counter").Result()
 	return uint64(val), err
+}
+
+func runHealthcheck() error {
+
+	// Se Redis estiver habilitado, valida conexão
+	if enableRedis {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		if err := redisClient.Ping(ctx).Err(); err != nil {
+			return err
+		}
+	}
+
+	// Valida se porta HTTP está aberta (opcional mas interessante)
+	port := getEnv("PORT", "8080")
+	conn, err := net.DialTimeout("tcp", "127.0.0.1:"+port, 2*time.Second)
+	if err != nil {
+		return err
+	}
+	conn.Close()
+
+	return nil
 }
