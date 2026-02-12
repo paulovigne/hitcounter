@@ -36,7 +36,7 @@ config:
   redisPort: "6379"
 
 istio:
-  ingressGateway: true
+  ingressGateway: false
   gatewayHost: hitcounter.local
 
 openshift:
