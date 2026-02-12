@@ -4,6 +4,7 @@ image:
   repository: ghcr.io/paulovigne/hitcounter
   tag: main
   pullPolicy: Always
+  pullSecret: null
 
 serviceAccount:
   create: true
@@ -47,6 +48,8 @@ ingress:
 
 redis:
   image: redis:7-alpine
+  pullPolicy: Always
+  pullSecret: null
   storage: 1Gi
   securityContext:
     runAsUser: 65532
