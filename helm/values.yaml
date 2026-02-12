@@ -35,13 +35,17 @@ config:
   redisHost: redis
   redisPort: "6379"
 
+istio:
+  ingressGateway: true
+
 openshift:
   enabled: false
+  # Route Ignored if istio.ingressGateway: true
   route:
     host: null
     tlsTermination: edge
 
-# Ignored if openshift.enabled: true
+# Ignored if openshift.enabled: true or istio.ingressGateway: true
 ingress:
   className: traefik
   host: hitcounter.local
