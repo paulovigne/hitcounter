@@ -33,6 +33,10 @@ spec:
         - name: hitcounter
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.pullSecret }}
+          imagePullSecrets:
+          - name: {{ .Values.pullSecret }}
+          {{- end }}
           ports:
             - containerPort: 8080
           envFrom:
