@@ -31,7 +31,7 @@ spec:
       containers:
         - name: redis
           image: {{ .Values.redis.image }}
-          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.redis.pullPolicy }}
           {{- if .Values.redis.pullSecret }}
           imagePullSecrets:
           - name: {{ .Values.redis.pullSecret }}
