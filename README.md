@@ -199,7 +199,7 @@ Nesse modo, o contador é mantido em disco no volume redis-data.
 🧪 Helm Chart
 ```
 helm install hitcounter oci://ghcr.io/paulovigne/hitcounter \
-  --version 0.1.0 \
+  --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
   --set ingress.className=traefik \
