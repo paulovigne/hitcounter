@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   hitcounter:
-    image: ghcr.io/paulovigne/hit-counter:main
+    image: ghcr.io/paulovigne/hitcounter:main
     container_name: hitcounter
     ports:
       - "8080:8080"
