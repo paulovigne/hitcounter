@@ -18,14 +18,14 @@ spec:
       securityContext:
         runAsNonRoot: true
       {{- if not .Values.openshift.enabled }}
-        {{- if .Values.securityContext.runAsUser }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- if .Values.redis.securityContext.runAsUser }}
+        runAsUser: {{ .Values.redis.securityContext.runAsUser }}
         {{- end }}
-        {{- if .Values.securityContext.runAsGroup }}
-        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        {{- if .Values.redis.securityContext.runAsGroup }}
+        runAsGroup: {{ .Values.redis.securityContext.runAsGroup }}
         {{- end }}
-        {{- if .Values.securityContext.fsGroup }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        {{- if .Values.redis.securityContext.fsGroup }}
+        fsGroup: {{ .Values.redis.securityContext.fsGroup }}
         {{- end }}
       {{- end }}             
       containers:
@@ -45,6 +45,13 @@ spec:
             exec:
               command: ["sh","-c","redis-cli ping | grep -q PONG"]
             initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: {{ .Values.redis.requests.cpu }}
+              memory: {{ .Values.redis.requests.memory }}
+            limits:
+              cpu: {{ .Values.redis.limits.cpu }}
+              memory: {{ .Values.redis.limits.memory }}            
   volumeClaimTemplates:
     - metadata:
         name: redis-data
