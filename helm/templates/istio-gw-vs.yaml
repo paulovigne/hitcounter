@@ -1,0 +1,35 @@
+{{- if .Values.istio.ingressGateway }}
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: hitcounter-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.istio.gatewayHost }}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: hitcounter
+spec:
+  hosts:
+    - {{ .Values.istio.gatewayHost }}
+  gateways:
+    - hitcounter-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: hitcounter
+            port:
+              number: 80
+{{- end }}
