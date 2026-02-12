@@ -27,6 +27,7 @@ O projeto foi criado como exemplo prático de:
 │      ├── hitcounter-service.yaml
 │      ├── redis-statefulset.yaml
 │      ├── redis-headless-service.yaml
+│      ├── istio-gw-vs.yaml
 │      ├── route.yaml
 │      └── ingress.yaml
 ├── k8s/
