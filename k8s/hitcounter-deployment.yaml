@@ -23,7 +23,7 @@ spec:
         fsGroup: 65532        
       containers:
         - name: hitcounter
-          image: ghcr.io/paulovigne/hit-counter:main
+          image: ghcr.io/paulovigne/hitcounter:main
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
