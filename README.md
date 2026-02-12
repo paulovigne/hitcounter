@@ -1,4 +1,4 @@
-# HitCounter 🧮
+# Hit-Counter 🧮
 
 Aplicação simples escrita em **Go** que expõe um contador de acessos via HTTP.  
 O contador pode operar de forma **stateless** ou utilizando **Redis** para persistência e contagem compartilhada entre múltiplas instâncias.
