@@ -37,6 +37,7 @@ config:
 
 istio:
   ingressGateway: true
+  gatewayHost: hitcounter.local
 
 openshift:
   enabled: false
