@@ -34,6 +34,17 @@ config:
   redisHost: redis
   redisPort: "6379"
 
+openshift:
+  enabled: false
+  route:
+    host: null
+    tlsTermination: edge
+
+# Ignored if openshift.enabled: true
+ingress:
+  className: traefik
+  host: hitcounter.local
+
 redis:
   image: redis:7-alpine
   storage: 1Gi
@@ -46,15 +57,4 @@ redis:
     memory: 256Mi
   limits:
     cpu: 1
-    memory: 1Gi    
-
-openshift:
-  enabled: false
-  route:
-    host: null
-    tlsTermination: edge
-
-# Ignored if openshift.enabled: true
-ingress:
-  className: traefik
-  host: hitcounter.local
+    memory: 1Gi  
