@@ -98,6 +98,13 @@ func initRedis() {
 }
 
 func hitHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Apenas GET /
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
 	var hits uint64
 	var err error
 
