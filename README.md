@@ -118,7 +118,7 @@ Redis
 🐳 Imagem Docker
 A aplicação é distribuída como imagem Docker:
 ```
-ghcr.io/paulovigne/hit-counter:main
+ghcr.io/paulovigne/hitcounter:main
 ```
 Características:
 - Build multi-stage
@@ -167,7 +167,7 @@ docker run -d \
   -p 8080:8080 \
   -e PORT=8080 \
   -e ENABLE_REDIS=false \
-  ghcr.io/paulovigne/hit-counter:main
+  ghcr.io/paulovigne/hitcounter:main
 ```
 Nesse modo, o contador é mantido apenas em memória.
 
@@ -191,7 +191,7 @@ docker run -d \
   -e ENABLE_REDIS=true \
   -e REDIS_HOST=redis \
   -e REDIS_PORT=6379 \
-  ghcr.io/paulovigne/hit-counter:main
+  ghcr.io/paulovigne/hitcounter:main
 
 ```
 Nesse modo, o contador é mantido em disco no volume redis-data.
