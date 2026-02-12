@@ -30,6 +30,10 @@ config:
 redis:
   image: redis:7-alpine
   storage: 1Gi
+  securityContext:
+    runAsUser: 65532
+    runAsGroup: 65532
+    fsGroup: 65532  
 
 openshift:
   enabled: false
