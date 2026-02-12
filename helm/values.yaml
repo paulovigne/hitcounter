@@ -16,6 +16,13 @@ securityContext:
   runAsGroup: 65532
   fsGroup: 65532
 
+requests:
+  cpu: 50m
+  memory: 64Mi
+limits:
+  cpu: 200m
+  memory: 128Mi
+
 service:
   type: ClusterIP
   port: 80
@@ -33,7 +40,13 @@ redis:
   securityContext:
     runAsUser: 65532
     runAsGroup: 65532
-    fsGroup: 65532  
+    fsGroup: 65532
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi    
 
 openshift:
   enabled: false
