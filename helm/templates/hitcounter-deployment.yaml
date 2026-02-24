@@ -46,6 +46,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
+            readOnlyRootFilesystem: true           
           readinessProbe:
             httpGet:
               path: /healthz
