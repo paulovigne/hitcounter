@@ -57,7 +57,13 @@ spec:
               memory: {{ .Values.redis.requests.memory }}
             limits:
               cpu: {{ .Values.redis.limits.cpu }}
-              memory: {{ .Values.redis.limits.memory }}            
+              memory: {{ .Values.redis.limits.memory }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true              
   volumeClaimTemplates:
     - metadata:
         name: redis-data
