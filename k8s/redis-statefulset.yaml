@@ -32,6 +32,7 @@ spec:
             - "--appendonly"
             - "yes"
           securityContext:
+            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
               drop:
