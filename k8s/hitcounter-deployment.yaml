@@ -31,6 +31,7 @@ spec:
             - configMapRef:
                 name: hitcounter-config
           securityContext:
+            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
               drop:
