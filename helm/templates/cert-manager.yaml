@@ -7,10 +7,10 @@ metadata:
   labels:
     {{- include "app.labels" . | nindent 4 }}  
 spec:
-  secretName: {{ .Values.tls.secret.name }}
+  secretName: {{ .Values.exposure.tls.secret.name }}
   issuerRef:
-    name: {{ .Values.tls.secret.certManager.issuerName }}
-    kind: {{ .Values.tls.secret.certManager.issuerKind | default "Issuer" }}
+    name: {{ .Values.exposure.tls.secret.certManager.issuerName }}
+    kind: {{ .Values.exposure.tls.secret.certManager.issuerKind | default "Issuer" }}
   dnsNames:
   - {{ .Values.exposure.host }}
 {{- end }}
