@@ -16,10 +16,10 @@ spec:
         app: {{ include "app.name" . }}
     spec:
       serviceAccountName: {{ include "app.name" . }}-sa
-      automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
+      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
-      {{- if not .Values.openshift.enabled }}
+      {{- if eq .Values.exposure.type "openshift" }}
         {{- if .Values.securityContext.runAsUser }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
         {{- end }}
