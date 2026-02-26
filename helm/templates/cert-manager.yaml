@@ -1,0 +1,16 @@
+{{- if .Values.exposure.tls.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "app.name" . }}-cert
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}  
+spec:
+  secretName: {{ .Values.tlsCert.secretName }}
+  issuerRef:
+    name: {{ .Values.tlsCert.certManager.issuerName }}
+    kind: {{ .Values.tlsCert.certManager.issuerKind | default "Issuer" }}
+  dnsNames:
+  - {{ .Values.exposure.host }}
+{{- end }}

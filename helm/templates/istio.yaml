@@ -1,0 +1,45 @@
+{{- if eq .Values.exposure.type "istio" }}
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "app.name" . }}-gateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}  
+spec:
+  selector:
+    istio: {{ .Values.istio.ingressGatewayName }}
+  servers:
+    - port:
+        number: {{ .Values.service.port }}
+        name: http
+        protocol: HTTP
+      hosts:
+        - {{ .Values.exposure.host }}
+{{- if .Values.exposure.tls.enabled }}      
+      tls:
+        mode: {{ .Values.exposure.tls.mode }}
+        credentialName: {{ .Values.exposure.tls.secret.name }}
+{{- end }}               
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "app.name" . }}-vs
+  labels:
+    {{- include "app.labels" . | nindent 4 }}  
+spec:
+  hosts:
+    - {{ .Values.exposure.host }}
+  gateways:
+    - {{ include "app.name" . }}-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ include "app.name" . }}-svc
+            port:
+              number: {{ .Values.service.port }}
+{{- end }}

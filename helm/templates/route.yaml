@@ -1,0 +1,30 @@
+{{- if eq .Values.exposure.type "route" }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "app.name" . }}-route
+  labels:
+    {{- include "app.labels" . | nindent 4 }}  
+spec:
+  host: {{ .Values.exposure.route.host }}
+  to:
+    kind: Service
+    name: {{ include "app.name" . }}-svc
+  port:
+    targetPort: http
+{{- if .Values.exposure.tls.enabled }}
+  tls:
+    termination: {{ .Values.exposure.tls.mode | default "edge" | quote }}
+{{- if and .Values.exposure.secret.crt .Values.exposure.secret.key }}
+    key: |-
+{{ .Values.exposure.secret.key | indent 6 }}
+    certificate: |-
+{{ .Values.exposure.secret.crt | indent 6 }}
+{{- if .Values.exposure.secret.ca }}
+    caCertificate: |-
+{{ .Values.exposure.secret.ca | indent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- end }}

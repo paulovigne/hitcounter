@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hitcounter
+  name: {{ include "app.name" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "hitcounter.labels" . | nindent 4 }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{- if not .Values.hpa.enabled }}{{ .Values.replicaCount }}{{- end }}
   selector:
     matchLabels:
-      app: hitcounter
+      app: {{ include "app.name" . }}
   template:
     metadata:
       labels:
-        app: hitcounter
+        app: {{ include "app.name" . }}
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.name }}
+      serviceAccountName: {{ include "app.name" . }}-sa
       automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
       securityContext:
         runAsNonRoot: true
@@ -30,7 +31,7 @@ spec:
         {{- end }}
       {{- end }}        
       containers:
-        - name: hitcounter
+        - name: {{ include "app.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.pullSecret }}
@@ -38,25 +39,23 @@ spec:
           - name: {{ .Values.pullSecret }}
           {{- end }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.service.targetPort }}
           envFrom:
             - configMapRef:
-                name: hitcounter-config
+                name: {{ include "app.name" . }}-config
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
             readOnlyRootFilesystem: true           
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-            initialDelaySeconds: 5
+          {{- if .Values.probe.startup }}
+          startupProbe:
+            {{- toYaml .Values.probe.startup | nindent 12 }}
+          {{- end }}
           livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-            initialDelaySeconds: 10
+            {{- toYaml .Values.probe.liveness | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.probe.readiness | nindent 12 }}
           resources:
             requests:
               cpu: {{ .Values.requests.cpu }}
