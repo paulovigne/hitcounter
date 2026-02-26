@@ -17,7 +17,7 @@ spec:
       labels:
         app: {{ include "app.name" . }}-redis
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.name }}
+      serviceAccountName: {{ include "app.name" . }}-sa
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
