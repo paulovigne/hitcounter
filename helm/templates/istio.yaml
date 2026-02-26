@@ -8,7 +8,7 @@ metadata:
     {{- include "app.labels" . | nindent 4 }}  
 spec:
   selector:
-    istio: {{ .Values.istio.ingressGatewayName }}
+    istio: {{ .Values.exposure.istio.ingressGatewayName }}
   servers:
     - port:
         number: {{ .Values.service.port }}
