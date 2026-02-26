@@ -1,8 +1,5 @@
 {{- define "app.name" -}}
 {{- .Release.Name -}}
-{{- end }}
-
-{{- define "app.name" -}}
 {{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
