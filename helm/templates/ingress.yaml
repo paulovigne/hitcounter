@@ -19,7 +19,7 @@ spec:
                 name: {{ include "app.name" . }}-svc
                 port:
                   number: {{ .Values.service.port }}
-{{ - if .Values.exposure.tls.enabled }}
+{{- if .Values.exposure.tls.enabled }}
   tls:
   - hosts:
     - {{ .Values.exposure.host }}
