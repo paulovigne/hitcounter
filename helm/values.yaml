@@ -305,7 +305,7 @@ exposure:
     namespace: istio-system
 
     # Name of the ingress gateway workload/service.
-    ingressGatewayName: istio-ingressgateway
+    ingressGatewayName: ingressgateway
 
 # ============================================================
 # Redis Subcomponent Configuration
