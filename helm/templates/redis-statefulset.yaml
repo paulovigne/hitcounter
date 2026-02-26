@@ -21,7 +21,7 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
-      {{- if not .Values.openshift.enabled }}
+      {{- if eq .Values.exposure.type "openshift" }}
         {{- if .Values.redis.securityContext.runAsUser }}
         runAsUser: {{ .Values.redis.securityContext.runAsUser }}
         {{- end }}
