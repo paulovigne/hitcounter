@@ -11,12 +11,18 @@ spec:
     istio: {{ .Values.exposure.istio.ingressGatewayName }}
   servers:
     - port:
-        number: {{ .Values.service.port }}
+        number: 80
         name: http
         protocol: HTTP
       hosts:
         - {{ .Values.exposure.host }}
 {{- if .Values.exposure.tls.enabled }}      
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - {{ .Values.exposure.host }}
       tls:
         mode: {{ .Values.exposure.tls.mode }}
         credentialName: {{ .Values.exposure.tls.secret.name }}
