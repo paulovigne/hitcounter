@@ -198,13 +198,21 @@ docker run -d \
 Nesse modo, o contador é mantido em disco no volume redis-data.
 
 🧪 Helm Chart
-```
+
+| Tipo | Endereço |
+|------|----------|
+| Helm Repository (HTTP) | https://paulovigne.github.io/hitcounter |
+| OCI Registry (GHCR) | oci://ghcr.io/paulovigne/hitcounter |
+
+```bash
 helm install hitcounter oci://ghcr.io/paulovigne/hitcounter \
   --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
-  --set ingress.className=traefik \
-  --set ingress.host=hitcounter.myip.sslip.io
+  --set exposure.type=ingress \
+  --set exposure.ingress.className=traefik \
+  --set exposure.host=hitcounter.mysite.com \
+  --set exposure.tls.enabled=false \
 ```
 
 🎯 Objetivo do Projeto
