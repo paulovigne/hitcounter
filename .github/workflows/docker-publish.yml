@@ -42,6 +42,30 @@ jobs:
           registry_password: ${{ secrets.GITHUB_TOKEN }}
           update_dependencies: 'true' # Defaults to false
 
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Package Helm Chart
+        run: |
+          mkdir -p .helm-repo
+          helm dependency update charts/hitcounter
+          helm package charts/hitcounter -d .helm-repo
+
+      - name: Generate Helm index.yaml
+        run: |
+          helm repo index .helm-repo \
+            --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+
+      - name: Publish Helm Repo to GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .helm-repo
+          publish_branch: gh-pages
+      
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
       # https://github.com/docker/setup-buildx-action
