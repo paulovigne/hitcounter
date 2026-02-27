@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "app.labels" . | nindent 4 }}  
 spec:
-  host: {{ .Values.exposure.route.host }}
+  host: {{ .Values.exposure.host }}
   to:
     kind: Service
     name: {{ include "app.name" . }}-svc
