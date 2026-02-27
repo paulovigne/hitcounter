@@ -101,6 +101,18 @@ The following table lists the configurable parameters of the chart and their def
 
 ---
 
+## Security Context Parameters
+
+| Name | Description | Default |
+|------|------------|---------|
+| `securityContext.runAsUser` | Run container as non-root user. `65532` is commonly used for distroless images. On OpenShift, SCC may override UID range. | `65532` |
+| `securityContext.runAsGroup` | Primary GID for the container process. On OpenShift, SCC may override GID range. | `65532` |
+| `securityContext.fsGroup` | FSGroup applied to mounted volumes for shared file permissions. | `65532` |
+| `securityContext.readOnlyRootFilesystem` | Mount container root filesystem as read-only for additional security hardening. | `true` |
+| `securityContext.openshift` | Enable OpenShift-specific security handling (SCC-compatible UID/GID behavior). | `false` |
+
+---
+
 ## Image Parameters
 
 | Name | Description | Default |
@@ -128,6 +140,7 @@ The following table lists the configurable parameters of the chart and their def
 |------|------------|---------|
 | `exposure.type` | Exposure strategy (`ingress`, `gatewayapi`, `route`, `istio`) | `ingress` |
 | `exposure.host` | Application hostname | `hitcounter.local` |
+| `exposure.path` | Application path | `/` |
 
 ---
 
@@ -237,44 +250,116 @@ The following table lists the configurable parameters of the chart and their def
 
 # Example Configurations
 
+## Ingress + Self Certificate
+
+```bash
+helm upgrade --install hitcounter charts/hitcouter/ \
+  --version 1.0.0 \
+  --namespace hitcounter \
+  --create-namespace \
+  --set exposure.type=ingress \
+  --set exposure.ingress.className=traefik \
+  --set exposure.host=app.myhost.com \
+  --set exposure.tls.enabled=true \
+  --set exposure.tls.secret.name=hitcounter-tls \
+  --set exposure.tls.secret.create=true \
+  --set-file exposure.tls.secret.crt=tls.crt \
+  --set-file exposure.tls.secret.key=tls.key \
+  --set-file exposure.tls.secret.ca=ca.crt
+```
+
 ## Ingress + cert-manager
 
-```yaml
-exposure:
-  type: ingress
-  host: app.example.com
-  tls:
-    enabled: true
-    secret:
-      create: false
-      name: app-tls
-      certManager:
-        enabled: true
-        issuerName: letsencrypt
-        issuerKind: ClusterIssuer
+```bash
+helm upgrade --install hitcounter charts/hitcouter/ \
+  --version 1.0.0 \
+  --namespace hitcounter \
+  --create-namespace \
+  --set exposure.type=ingress \
+  --set exposure.ingress.className=traefik \
+  --set exposure.host=app.myhost.com \
+  --set exposure.tls.enabled=true \
+  --set exposure.tls.secret.name=hitcounter-tls \
+  --set exposure.tls.secret.certManager.enabled=true \
+  --set exposure.tls.secret.certManager.issuerName=selfsigned-cluster-issuer \
+  --set exposure.tls.secret.certManager.issuerKind=ClusterIssuer
 ```
 
 ---
 
-## OpenShift Route
+## OpenShift Route + Auto hostname and certificate
 
-```yaml
-exposure:
-  type: route
-  route:
-    termination: edge
+```bash
+helm upgrade --install hitcounter charts/hitcouter/ \
+  --version 1.0.0 \
+  --namespace hitcounter \
+  --create-namespace \
+  --set securityContext.openshift=true \
+  --set exposure.type=route \
+  --set exposure.host=null \
+  --set exposure.tls.enabled=true
 ```
 
 ---
 
-## Istio Gateway with TLS
+## Istio Gateway with TLS + cert-manager
 
-```yaml
-exposure:
-  type: istio
-  tls:
-    enabled: true
-    mode: SIMPLE
+```bash
+helm upgrade --install hitcounter charts/hitcouter/ \
+  --version 1.0.0 \
+  --namespace hitcounter \
+  --create-namespace \
+  --set exposure.type=istio \
+  --set exposure.host=app.myhost.com \
+  --set exposure.tls.enabled=true \
+  --set exposure.tls.mode=SIMPLE \
+  --set exposure.tls.secret.name=hitcounter-tls \
+  --set exposure.tls.secret.certManager.enabled=true \
+  --set exposure.tls.secret.certManager.issuerName=selfsigned-cluster-issuer \
+  --set exposure.tls.secret.certManager.issuerKind=ClusterIssuer
+```
+
+## K8S Gateway API with TLS + cert-manager
+
+```bash
+helm upgrade --install hitcounter charts/hitcouter/ \
+  --version 1.0.0 \
+  --namespace hitcounter \
+  --create-namespace \
+  --set exposure.type=gatewayapi \
+  --set exposure.gatewayapi.gatewayClassName=traefik \
+  --set exposure.host=app.myhost.com \
+  --set exposure.tls.enabled=true \
+  --set exposure.tls.mode=Terminate \
+  --set exposure.tls.secret.name=hitcounter-tls \
+  --set exposure.tls.secret.certManager.enabled=true \
+  --set exposure.tls.secret.certManager.issuerName=selfsigned-cluster-issuer \
+  --set exposure.tls.secret.certManager.issuerKind=ClusterIssuer
+```
+
+## CertManager for testing
+
+### Helm Install
+
+```bash
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.19.4 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true
+```
+### Self Signed cluster-issuer
+
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-cluster-issuer
+spec:
+  selfSigned: {}
+EOF
 ```
 
 ---
