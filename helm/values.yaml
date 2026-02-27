@@ -197,8 +197,8 @@ exposure:
     #   - Only supports termination (secret-based TLS)
     #
     # gatewayapi:
-    #   - terminate
-    #   - passthrough
+    #   - Terminate
+    #   - Passthrough
     #
     # route (OpenShift):
     #   - edge
