@@ -15,14 +15,14 @@ spec:
 {{- if .Values.exposure.tls.enabled }}
   tls:
     termination: {{ .Values.exposure.tls.mode | default "edge" | quote }}
-{{- if and .Values.exposure.secret.crt .Values.exposure.secret.key }}
+{{- if and .Values.exposure.tls.secret.crt .Values.exposure.tls.secret.key }}
     key: |-
-{{ .Values.exposure.secret.key | indent 6 }}
+{{ .Values.exposure.tls.secret.key | indent 6 }}
     certificate: |-
-{{ .Values.exposure.secret.crt | indent 6 }}
-{{- if .Values.exposure.secret.ca }}
+{{ .Values.exposure.tls.secret.crt | indent 6 }}
+{{- if .Values.exposure.tls.secret.ca }}
     caCertificate: |-
-{{ .Values.exposure.secret.ca | indent 6 }}
+{{ .Values.exposure.tls.secret.ca | indent 6 }}
 {{- end }}
 {{- end }}
 {{- end }}
