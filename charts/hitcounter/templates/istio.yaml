@@ -42,7 +42,7 @@ spec:
   http:
     - match:
         - uri:
-            prefix: /
+            prefix: {{ .Values.exposure.path }}
       route:
         - destination:
             host: {{ include "app.name" . }}-svc

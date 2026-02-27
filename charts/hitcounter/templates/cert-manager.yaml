@@ -1,0 +1,20 @@
+{{- if .Values.exposure.tls.secret.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "app.name" . }}-cert
+{{- if eq .Values.exposure.type "istio" }}
+  namespace: {{ .Values.exposure.istio.namespace }}
+{{- else }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}  
+spec:
+  secretName: {{ .Values.exposure.tls.secret.name }}
+  issuerRef:
+    name: {{ .Values.exposure.tls.secret.certManager.issuerName }}
+    kind: {{ .Values.exposure.tls.secret.certManager.issuerKind | default "Issuer" }}
+  dnsNames:
+  - {{ .Values.exposure.host }}
+{{- end }}

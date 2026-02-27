@@ -36,7 +36,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: {{ .Values.exposure.path }}
       backendRefs:
         - name: {{ include "app.name" . }}-svc
           port: {{ .Values.service.port }}

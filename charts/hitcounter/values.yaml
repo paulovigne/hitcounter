@@ -107,11 +107,12 @@ securityContext:
 
   # Run container as non-root user.
   # 65532 is commonly used for distroless images.
-  # If openshift: true, SCC ranges: [1014000000, 1014009999]
-  # will be provided.
+  # If openshift: true, SCC UID/GID 
+  # ranges: [1014000000, 1014009999] will be provided.
   runAsUser: 65532
   runAsGroup: 65532
   fsGroup: 65532
+  readOnlyRootFilesystem: true
   openshift: false
 
 
@@ -184,6 +185,9 @@ exposure:
   # Public hostname used by all exposure types.
   # If null, some providers may auto-generate.
   host: hitcounter.local
+
+  # Public app path used by all exposure types.
+  path: /
 
   # ==========================================================
   # TLS Configuration (centralized for all providers)

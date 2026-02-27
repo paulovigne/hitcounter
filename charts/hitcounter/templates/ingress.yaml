@@ -12,7 +12,7 @@ spec:
     - host: {{ .Values.exposure.host }}
       http:
         paths:
-          - path: /
+          - path: {{ .Values.exposure.path }}
             pathType: Prefix
             backend:
               service:

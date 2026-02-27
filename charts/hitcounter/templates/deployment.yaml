@@ -49,7 +49,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-            readOnlyRootFilesystem: true           
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}           
           {{- if .Values.probe.startup }}
           startupProbe:
             {{- toYaml .Values.probe.startup | nindent 12 }}
