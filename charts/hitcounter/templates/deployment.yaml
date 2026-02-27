@@ -21,7 +21,7 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
-      {{- if .Values.securityContext.openshift }}
+      {{- if not .Values.securityContext.openshift }}
         {{- if .Values.securityContext.runAsUser }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
         {{- end }}
