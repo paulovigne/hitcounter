@@ -107,9 +107,12 @@ securityContext:
 
   # Run container as non-root user.
   # 65532 is commonly used for distroless images.
+  # If openshift: true, SCC ranges: [1014000000, 1014009999]
+  # will be provided.
   runAsUser: 65532
   runAsGroup: 65532
   fsGroup: 65532
+  openshift: false
 
 
 # ============================================================
