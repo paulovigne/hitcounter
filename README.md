@@ -9,38 +9,6 @@ O projeto foi criado como exemplo prático de:
 - Uso com manifestos Kubernetes e Helm Chart
 - Separação entre aplicação stateless e serviço stateful
 
-📁 Estrutura do Repositório
-
-```
-.
-├── docker-compose.yml
-├── Dockerfile
-├── hitcounter.go
-├── helm/
-|   ├── Chart.yaml
-|   ├── values.yaml
-|   └── templates/
-│      ├── _helpers.tpl
-│      ├── serviceaccount.yaml
-│      ├── configmap.yaml
-│      ├── hitcounter-deployment.yaml
-│      ├── hitcounter-service.yaml
-│      ├── redis-statefulset.yaml
-│      ├── redis-headless-service.yaml
-│      ├── istio-gw-vs.yaml
-│      ├── route.yaml
-│      └── ingress.yaml
-├── k8s/
-│   ├── hitcounter-deployment.yaml
-│   ├── hitcounter-service.yaml
-|   ├── configmap.yaml
-|   ├── ingress.yaml
-|   ├── serviceaccount.yaml
-|   ├── redis-headless-service.yaml
-│   └── redis-statefulset.yaml
-└── README.md
-```
-
 ---
 
 ## 📌 Visão Geral da Arquitetura
@@ -212,7 +180,7 @@ helm install hitcounter oci://ghcr.io/paulovigne/hitcounter \
   --set exposure.type=ingress \
   --set exposure.ingress.className=traefik \
   --set exposure.host=hitcounter.mysite.com \
-  --set exposure.tls.enabled=false \
+  --set exposure.tls.enabled=false
 ```
 
 🎯 Objetivo do Projeto
