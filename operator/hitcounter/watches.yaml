@@ -2,6 +2,6 @@
 - group: apps.vigne.com.br
   version: v1alpha1
   kind: HitCounter
-  chart: oci://ghcr.io/paulovigne/hitcounter
+  chart: https://paulovigne.github.io/hitcounter
   version: 1.0.0
 # +kubebuilder:scaffold:watch
