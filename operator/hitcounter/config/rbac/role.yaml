@@ -3,30 +3,31 @@ kind: ClusterRole
 metadata:
   name: manager-role
 rules:
+
 ##
 ## Base operator rules
 ##
-# We need to get namespaces so the operator can read namespaces to ensure they exist
 - apiGroups:
   - ""
   resources:
   - namespaces
   verbs:
   - get
-# We need to manage Helm release secrets
+
 - apiGroups:
   - ""
   resources:
   - secrets
   verbs:
   - "*"
-# We need to create events on CRs about things happening during reconciliation
+
 - apiGroups:
   - ""
   resources:
   - events
   verbs:
   - create
+  - patch
 
 ##
 ## Rules for apps.vigne.com.br/v1alpha1, Kind: HitCounter
@@ -45,6 +46,10 @@ rules:
   - patch
   - update
   - watch
+
+##
+## Core Kubernetes resources
+##
 - apiGroups:
   - ""
   resources:
@@ -56,6 +61,7 @@ rules:
   - events
   - configmaps
   - secrets
+  - serviceaccounts
   verbs:
   - create
   - delete
@@ -64,6 +70,10 @@ rules:
   - patch
   - update
   - watch
+
+##
+## Workloads
+##
 - apiGroups:
   - apps
   resources:
@@ -80,4 +90,55 @@ rules:
   - update
   - watch
 
-# +kubebuilder:scaffold:rules
+##
+## Ingress
+##
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  - ingresses/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
+##
+## OpenShift Route
+##
+- apiGroups:
+  - route.openshift.io
+  resources:
+  - routes
+  - routes/custom-host
+  - routes/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
+##
+## Istio
+##
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - gateways
+  - virtualservices
+  - destinationrules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
