@@ -1,0 +1,76 @@
+name: Build and Publish HitCounter Operator
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "main" ]
+      
+env:
+ REGISTRY: ghcr.io
+ IMAGE_NAME: ${{ github.repository_owner }}/hitcounter-operator
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+
+      - name: Install operator-sdk
+        run: |
+          curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.36.1/operator-sdk_linux_amd64
+          chmod +x operator-sdk_linux_amd64
+          sudo mv operator-sdk_linux_amd64 /usr/local/bin/operator-sdk
+
+      - name: Install kustomize
+        run: |
+          curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
+          sudo mv kustomize /usr/local/bin
+
+      - name: Docker login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push operator image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Generate manifests
+        run: |
+          #operator-sdk generate kustomize manifests -q
+          kustomize build operator/hitcounter/config/default > .helm-repo/hitcounter-operator.yaml
+
+      - name: Publish Helm Repo to GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .helm-repo
+          publish_branch: charts
