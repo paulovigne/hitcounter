@@ -4,8 +4,6 @@ on:
   push:
     branches: [ "main" ]
     tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ "main" ]
       
 env:
  REGISTRY: ghcr.io
@@ -61,9 +59,7 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max          
+          labels: ${{ steps.meta.outputs.labels }}    
 
       - name: Generate manifests
         run: |
