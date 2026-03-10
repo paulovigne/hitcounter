@@ -64,12 +64,13 @@ jobs:
       - name: Generate manifests
         run: |
           #operator-sdk generate kustomize manifests -q
-          kustomize build operator/hitcounter/config/default > .helm-repo/hitcounter-operator.yaml
+          mkdir -p .operator
+          kustomize build operator/hitcounter/config/default > .operator/hitcounter-operator.yaml
 
       - name: Publish Helm Repo to GitHub Pages
         if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .helm-repo
+          publish_dir: .operator
           publish_branch: charts
