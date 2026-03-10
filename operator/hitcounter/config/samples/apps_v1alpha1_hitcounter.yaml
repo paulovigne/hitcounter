@@ -1,0 +1,98 @@
+apiVersion: apps.vigne.com.br/v1alpha1
+kind: HitCounter
+metadata:
+  name: hitcounter-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/hitcounter/values.yaml
+  config:
+    enableRedis: true
+    port: "8080"
+    redisHost: redis-svc
+    redisPort: "6379"
+  exposure:
+    gatewayapi:
+      gatewayClassName: traefik
+    host: hitcounter.local
+    ingress:
+      className: traefik
+    istio:
+      ingressGatewayName: ingressgateway
+      namespace: istio-system
+    path: /
+    tls:
+      enabled: false
+      mode: null
+      secret:
+        ca: null
+        certManager:
+          enabled: false
+          issuerKind: null
+          issuerName: null
+        create: false
+        crt: null
+        key: null
+        name: hitcounter-tls
+    type: ingress
+  hpa:
+    cpuUtilization: 60
+    enabled: false
+    maxReplicas: 6
+    minReplicas: 2
+  image:
+    pullPolicy: Always
+    pullSecret: null
+    repository: ghcr.io/paulovigne/hitcounter
+    tag: main
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  probe:
+    liveness:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 15
+      periodSeconds: 15
+      successThreshold: 1
+      timeoutSeconds: 1
+    readiness:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 15
+      periodSeconds: 15
+      successThreshold: 1
+      timeoutSeconds: 1
+  redis:
+    image: redis:7-alpine
+    limits:
+      cpu: 1
+      memory: 1Gi
+    pullPolicy: Always
+    pullSecret: null
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    securityContext:
+      fsGroup: 65532
+      runAsGroup: 65532
+      runAsUser: 65532
+    storage: 1Gi
+  replicaCount: 2
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  securityContext:
+    fsGroup: 65532
+    openshift: false
+    readOnlyRootFilesystem: true
+    runAsGroup: 65532
+    runAsUser: 65532
+  service:
+    port: 80
+    targetPort: 8080
+    type: ClusterIP
+  
+  

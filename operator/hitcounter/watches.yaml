@@ -1,0 +1,7 @@
+# Use the 'create api' subcommand to add watches to this file.
+- group: apps.vigne.com.br
+  version: v1alpha1
+  kind: HitCounter
+  chart: oci://ghcr.io/paulovigne/hitcounter
+  version: 1.0.0
+# +kubebuilder:scaffold:watch
