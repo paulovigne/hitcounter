@@ -368,7 +368,7 @@ spec:
         - --leader-elect
         - --leader-election-id=hitcounter
         - --health-probe-bind-address=:8081
-        image: ghcr.io/paulovigne/hitcounter-operator:v1.0.0
+        image: ghcr.io/paulovigne/hitcounter-operator:main
         livenessProbe:
           httpGet:
             path: /healthz
