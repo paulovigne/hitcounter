@@ -72,6 +72,22 @@ rules:
   - watch
 
 ##
+## Horizontal Pod Autoscaler
+##
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
+##
 ## Workloads
 ##
 - apiGroups:
@@ -134,6 +150,27 @@ rules:
   - gateways
   - virtualservices
   - destinationrules
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
+##
+## Kubernetes Gateway API
+##
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - gateways
+  - httproutes
+  - grpcroutes
+  - tcproutes
+  - tlsroutes
+  - udproutes
   verbs:
   - create
   - delete
