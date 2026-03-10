@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
 
@@ -64,8 +64,10 @@ jobs:
       - name: Generate manifests
         run: |
           #operator-sdk generate kustomize manifests -q
-          mkdir -p .operator
-          kustomize build operator/hitcounter/config/default > .operator/hitcounter-operator.yaml
+          mkdir -p ~/.operator
+          cd operator/hitcounter/config/default
+          kustomize edit set image controller=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          kustomize build . > ~/.operator/hitcounter-operator.yaml
 
       - name: Publish Helm Repo to GitHub Pages
         if: github.event_name != 'pull_request'
