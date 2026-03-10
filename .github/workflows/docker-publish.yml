@@ -130,7 +130,7 @@ jobs:
       - name: Build and push Operator image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: operator/hitcounter
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-operator.outputs.tags }}
           labels: ${{ steps.meta-operator.outputs.labels }}
