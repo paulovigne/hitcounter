@@ -212,11 +212,11 @@ spec:
       enabled: false
 EOF
 ```
-🧪 How to create one operator
+🧪 How to create an operator
 
 Install operator-sdk
 ```bash
-curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.36.1/operator-sdk_linux_amd64
+curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.42.0/operator-sdk_linux_amd64
 chmod +x operator-sdk_linux_amd64
 sudo mv operator-sdk_linux_amd64 /usr/local/bin/operator-sdk
 ```
