@@ -179,3 +179,20 @@ rules:
   - patch
   - update
   - watch
+
+##
+## Certmanager 
+##
+- apiGroups: 
+  - cert-manager.io
+  resources: 
+  - certificates
+  - certificaterequests
+  verbs: 
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
