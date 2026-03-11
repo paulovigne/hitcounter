@@ -183,6 +183,66 @@ helm install hitcounter oci://ghcr.io/paulovigne/hitcounter \
   --set exposure.tls.enabled=false
 ```
 
+🧪 Operator
+
+Installing the Operator
+
+```bash
+kubectl apply -f https://paulovigne.github.io/hitcounter/hitcounter-operator.yaml
+```
+
+Deploy Application
+
+```bash
+cat <<EOF | kubectl -n hitcounter apply -f -
+apiVersion: apps.vigne.com.br/v1alpha1
+kind: HitCounter
+metadata:
+  name: hitcounter
+spec:
+
+  exposure:
+    type: ingress
+    host: hitcounter.mysite.com
+
+    ingress:
+      className: traefik
+
+    tls:
+      enabled: false
+EOF
+```
+🧪 How to create one operator
+
+Install operator-sdk
+```bash
+curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.36.1/operator-sdk_linux_amd64
+chmod +x operator-sdk_linux_amd64
+sudo mv operator-sdk_linux_amd64 /usr/local/bin/operator-sdk
+```
+
+Install Kustomize
+```bash
+curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
+sudo mv kustomize /usr/local/bin
+```
+
+Iniciate operator structure
+```bash
+operator-sdk init \
+  --domain vigne.com.br \
+  --plugins helm
+```
+
+Create manifests
+```bash
+operator-sdk create api \
+  --group apps \
+  --version v1alpha1 \
+  --kind HitCounter \
+  --helm-chart <path>/<chart>
+```
+
 🎯 Objetivo do Projeto
 Este projeto tem fins educacionais e demonstrativos, sendo útil para:
 * Estudos de Kubernetes
