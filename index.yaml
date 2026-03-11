@@ -3,12 +3,12 @@ entries:
   hitcounter:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-03-11T11:21:31.723702021Z"
+    created: "2026-03-11T11:51:51.342621433Z"
     description: HitCounter application with Redis backend
-    digest: 83a5e833ab8a51c6228bca11ac58b09a85049598122b41b50bf567774744699d
+    digest: d9e2edc9e03c0f65db4b80502ce0698a91cbf0aa4cc667f4283e58474571fea9
     name: hitcounter
     type: application
     urls:
     - https://paulovigne.github.io/hitcounter/hitcounter-1.0.0.tgz
     version: 1.0.0
-generated: "2026-03-11T11:21:31.722916634Z"
+generated: "2026-03-11T11:51:51.341831954Z"
