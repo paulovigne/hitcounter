@@ -6,3 +6,5 @@ resources:
   - service.yaml
   - ingress.yaml
   - hpa.yaml
+  - configmap.yaml
+  - serviceaccount.yaml

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hitcounter-config
+data:
+  PORT: "8080"
+  ENABLE_REDIS: "true"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"

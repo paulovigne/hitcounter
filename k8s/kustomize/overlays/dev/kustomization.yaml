@@ -7,10 +7,33 @@ resources:
 components:
   - ../../components/redis
 
-patches:
-  - path: patch-deployment.yaml
-  - path: patch-ingress.yaml
+replicas:
+  - name: hitcounter
+    count: 1
 
 images:
   - name: ghcr.io/paulovigne/hitcounter
     newTag: dev
+
+patches:
+  - target:
+      kind: Ingress
+      name: hitcounter
+    patch: |-
+      - op: replace
+        path: /spec/ingressClassName
+        value: traefik
+      - op: replace
+        path: /spec/rules/0/host
+        value: hitcounter.dev.local
+
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: hitcounter
+    patch: |-
+      - op: replace
+        path: /spec/minReplicas
+        value: 1
+      - op: replace
+        path: /spec/maxReplicas
+        value: 3
