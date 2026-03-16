@@ -7,10 +7,10 @@ resources:
 components:
   - ../../components/redis
 
-configMapGenerator:
-  - name: env-config
-    files:
-      - env.yaml
+patches:
+  - path: patch-deployment.yaml
+  - path: patch-ingress.yaml
 
-generatorOptions:
-  disableNameSuffixHash: true
+images:
+  - name: ghcr.io/paulovigne/hitcounter
+    newTag: dev
