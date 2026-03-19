@@ -13,7 +13,8 @@ replicas:
 
 images:
   - name: ghcr.io/paulovigne/hitcounter
-    newTag: main
+    newName: paulovigne/hitcounter
+    newTag: v1-prd
 
 patches:
   - target:
@@ -25,7 +26,7 @@ patches:
         value: traefik
       - op: replace
         path: /spec/rules/0/host
-        value: hitcounter.dev.local
+        value: hitcounter.prd.local
 
   - target:
       kind: HorizontalPodAutoscaler
