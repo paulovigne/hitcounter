@@ -13,7 +13,8 @@ replicas:
 
 images:
   - name: ghcr.io/paulovigne/hitcounter
-    newTag: dev
+    newName: paulovigne/hitcounter
+    newTag: v1-dev
 
 patches:
   - target:
