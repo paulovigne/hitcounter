@@ -253,7 +253,7 @@ The following table lists the configurable parameters of the chart and their def
 ## Ingress + Self Certificate
 
 ```bash
-helm upgrade --install hitcounter charts/hitcouter/ \
+helm upgrade --install hitcounter charts/hitcounter/ \
   --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
@@ -271,7 +271,7 @@ helm upgrade --install hitcounter charts/hitcouter/ \
 ## Ingress + cert-manager
 
 ```bash
-helm upgrade --install hitcounter charts/hitcouter/ \
+helm upgrade --install hitcounter charts/hitcounter/ \
   --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
@@ -290,7 +290,7 @@ helm upgrade --install hitcounter charts/hitcouter/ \
 ## OpenShift Route + Auto hostname and certificate
 
 ```bash
-helm upgrade --install hitcounter charts/hitcouter/ \
+helm upgrade --install hitcounter charts/hitcounter/ \
   --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
@@ -305,7 +305,7 @@ helm upgrade --install hitcounter charts/hitcouter/ \
 ## Istio Gateway with TLS + cert-manager
 
 ```bash
-helm upgrade --install hitcounter charts/hitcouter/ \
+helm upgrade --install hitcounter charts/hitcounter/ \
   --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
@@ -322,7 +322,7 @@ helm upgrade --install hitcounter charts/hitcouter/ \
 ## K8S Gateway API with TLS + cert-manager
 
 ```bash
-helm upgrade --install hitcounter charts/hitcouter/ \
+helm upgrade --install hitcounter charts/hitcounter/ \
   --version 1.0.0 \
   --namespace hitcounter \
   --create-namespace \
