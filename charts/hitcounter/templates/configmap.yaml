@@ -8,5 +8,9 @@ metadata:
 data:
   PORT: {{ .Values.config.port | quote }}
   ENABLE_REDIS: {{ .Values.config.enableRedis | quote }}
-  REDIS_HOST: {{ .Values.config.redisHost | quote }}
+  REDIS_HOST: {{ if .Values.config.redisHost }}
+  {{- .Values.config.redisHost | quote }}
+{{- else }}
+  {{- include "app.name" . }}-redis-svc | quote }}
+{{- end }}
   REDIS_PORT: {{ .Values.config.redisPort | quote }}

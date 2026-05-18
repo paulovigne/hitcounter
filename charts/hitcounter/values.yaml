@@ -161,7 +161,7 @@ config:
   enableRedis: true
 
   # Redis service hostname (Kubernetes service name).
-  redisHost: redis-svc
+  redisHost: null
 
   # Redis port.
   redisPort: "6379"
