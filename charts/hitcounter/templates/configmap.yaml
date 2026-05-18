@@ -11,6 +11,6 @@ data:
   REDIS_HOST: {{ if .Values.config.redisHost }}
   {{- .Values.config.redisHost | quote }}
 {{- else }}
-  {{- include "app.name" . }}-redis-svc | quote }}
+  {{- include "app.name" . }}-redis-svc
 {{- end }}
   REDIS_PORT: {{ .Values.config.redisPort | quote }}
