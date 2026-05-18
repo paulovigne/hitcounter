@@ -14,6 +14,8 @@ spec:
       app: {{ include "app.name" . }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
         app: {{ include "app.name" . }}
     spec:
@@ -45,6 +47,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "app.name" . }}-config
+            - secretRef:
+                name: {{ include "app.name" . }}-secret
+                optional: true
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
