@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ .Values.config | toYaml | sha256sum }}
       labels:
         app: {{ include "app.name" . }}
     spec:
